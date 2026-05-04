@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sherzod Zinatdinov — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&family=Sora:wght@200;300;400;500;600;700;800&family=Outfit:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --blue-deep: #0a1628;
+    --blue-royal: #1a3a6b;
+    --blue-electric: #2563eb;
+    --blue-bright: #3b82f6;
+    --blue-light: #080c10;
+    --blue-pale: #09131f;
+    --glass-bg: rgba(255,255,255,0.08);
+    --glass-border: rgba(255,255,255,0.18);
+    --glass-shadow: rgba(37,99,235,0.25);
+    --text-primary: #13171d;
+    --text-secondary: rgba(13, 17, 23, 0.8);
+    --green: #22c55e;
+    --orange: #f97316;
+    --teal: #071e23;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: #060e1f;
+    color: var(--text-primary);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* === CUSTOM CURSOR === */
+  .cursor {
+    position: fixed;
+    width: 12px; height: 12px;
+    background: #60a5fa;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%,-50%);
+    transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
+    mix-blend-mode: screen;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1.5px solid rgba(96,165,250,0.6);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%,-50%);
+    transition: transform 0.18s cubic-bezier(0.25,0.46,0.45,0.94), width 0.3s, height 0.3s, border-color 0.3s;
+  }
+  body:has(a:hover) .cursor, body:has(button:hover) .cursor { width: 20px; height: 20px; background: #93c5fd; }
+  body:has(a:hover) .cursor-ring, body:has(button:hover) .cursor-ring { width: 56px; height: 56px; border-color: rgba(147,197,253,0.8); }
+
+  /* === SKY BACKGROUND === */
+  .sky-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background: linear-gradient(
+      180deg,
+      #0a1e3d 0%,
+      #0d2a52 15%,
+      #1a4080 30%,
+      #2563a8 50%,
+      #4a90d9 70%,
+      #87bdee 85%,
+      #c5dff7 100%
+    );
+    overflow: hidden;
+  }
+
+  /* Sun glow */
+  .sky-bg::before {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: 50%;
+    transform: translateX(-50%);
+    width: 320px; height: 320px;
+    background: radial-gradient(circle, rgba(255,235,180,0.35) 0%, rgba(255,200,100,0.12) 40%, transparent 70%);
+    border-radius: 50%;
+    animation: sunPulse 6s ease-in-out infinite;
+  }
+
+  @keyframes sunPulse {
+    0%,100% { opacity: 0.7; transform: translateX(-50%) scale(1); }
+    50% { opacity: 1; transform: translateX(-50%) scale(1.08); }
+  }
+
+  /* Stars */
+  .stars { position: absolute; inset: 0; }
+  .star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle var(--dur) ease-in-out infinite var(--delay);
+  }
+  @keyframes twinkle {
+    0%,100% { opacity: 0.2; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.4); }
+  }
+
+  /* Clouds */
+  .clouds { position: absolute; inset: 0; pointer-events: none; }
+  .cloud {
+    position: absolute;
+    border-radius: 50px;
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(4px);
+    animation: cloudDrift var(--speed) linear infinite;
+    filter: blur(1px);
+  }
+  .cloud::before, .cloud::after {
+    content: '';
+    position: absolute;
+    background: inherit;
+    border-radius: 50%;
+  }
+  @keyframes cloudDrift {
+    from { transform: translateX(-120%); }
+    to { transform: translateX(120vw); }
+  }
+
+  /* === MOUSE AURA === */
+  .mouse-aura {
+    position: fixed;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1;
+    background: radial-gradient(circle, rgba(37,99,235,0.15) 0%, transparent 70%);
+    transform: translate(-50%,-50%);
+    transition: transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+    filter: blur(1px);
+  }
+
+  /* === LAYOUT === */
+  .page { position: relative; z-index: 2; }
+
+  /* === NAV === */
+  nav {
+    position: fixed;
+    top: 20px; left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    background: rgba(10,22,40,0.5);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 50px;
+    padding: 12px 32px;
+    display: flex;
+    gap: 32px;
+    align-items: center;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
+    animation: navSlideIn 1s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+  @keyframes navSlideIn {
+    from { opacity: 0; transform: translateX(-50%) translateY(-30px); }
+    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+  }
+  nav a {
+    color: rgba(191,219,254,0.8);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    transition: color 0.3s, text-shadow 0.3s;
+    position: relative;
+  }
+  nav a::after {
+    content: '';
+    position: absolute;
+    bottom: -3px; left: 0;
+    width: 0; height: 1px;
+    background: var(--blue-light);
+    transition: width 0.3s;
+    box-shadow: 0 0 8px var(--blue-light);
+  }
+  nav a:hover { color: #fff; text-shadow: 0 0 16px rgba(96,165,250,0.8); }
+  nav a:hover::after { width: 100%; }
+
+  /* === SECTIONS === */
+  section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 120px 24px 80px;
+  }
+
+  /* === GLASS CARD === */
+  .glass {
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(32px) saturate(180%);
+    -webkit-backdrop-filter: blur(32px) saturate(180%);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 28px;
+    box-shadow:
+      0 32px 80px rgba(0,0,0,0.35),
+      0 0 0 0.5px rgba(255,255,255,0.06) inset,
+      0 1px 0 rgba(255,255,255,0.2) inset;
+    transition: transform 0.5s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.5s;
+    position: relative;
+    overflow: hidden;
+  }
+  .glass::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -60%;
+    width: 60%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.7s;
+  }
+  .glass:hover::before { left: 140%; }
+  .glass:hover {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow:
+      0 48px 100px rgba(0,0,0,0.4),
+      0 0 60px rgba(37,99,235,0.2),
+      0 0 0 0.5px rgba(255,255,255,0.1) inset,
+      0 1px 0 rgba(255,255,255,0.25) inset;
+  }
+
+  /* === HERO === */
+  #hero {
+    flex-direction: column;
+    text-align: center;
+    gap: 0;
+    padding-top: 160px;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(37,99,235,0.15);
+    border: 1px solid rgba(37,99,235,0.35);
+    border-radius: 50px;
+    padding: 8px 20px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--blue-light);
+    margin-bottom: 32px;
+    animation: fadeUp 0.8s 0.3s both;
+    backdrop-filter: blur(12px);
+  }
+  .badge-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--blue-light);
+    animation: dotPulse 2s infinite;
+    box-shadow: 0 0 8px var(--blue-light);
+  }
+  @keyframes dotPulse { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.5); opacity: 0.6; } }
+
+  .hero-name {
+    font-family: 'Sora', sans-serif;
+    font-size: clamp(48px, 8vw, 110px);
+    font-weight: 800;
+    line-height: 1;
+    background: linear-gradient(135deg, #ffffff 0%, #bfdbfe 40%, #60a5fa 70%, #93c5fd 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 16px;
+    animation: fadeUp 0.8s 0.5s both;
+    text-shadow: none;
+    filter: drop-shadow(0 0 40px rgba(96,165,250,0.3));
+  }
+
+  .hero-title {
+    font-size: clamp(16px, 2.5vw, 22px);
+    font-weight: 300;
+    color: var(--text-secondary);
+    margin-bottom: 48px;
+    letter-spacing: 0.5px;
+    animation: fadeUp 0.8s 0.7s both;
+  }
+  .hero-title span {
+    color: var(--blue-light);
+    font-weight: 500;
+  }
+
+  .hero-scroll {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-top: 60px;
+    animation: fadeUp 0.8s 1.2s both;
+    opacity: 0.6;
+  }
+  .scroll-line {
+    width: 1px; height: 60px;
+    background: linear-gradient(to bottom, transparent, var(--blue-light));
+    animation: scrollLine 2s ease-in-out infinite;
+  }
+  @keyframes scrollLine { 0%,100% { transform: scaleY(1); opacity: 0.6; } 50% { transform: scaleY(0.5); opacity: 1; } }
+  .scroll-text { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--blue-pale); }
+
+  /* === SECTION TITLE === */
+  .section-title {
+    font-family: 'Sora', sans-serif;
+    font-size: clamp(32px, 5vw, 54px);
+    font-weight: 700;
+    background: linear-gradient(135deg, #fff 0%, #bfdbfe 60%, #60a5fa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+  .section-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--blue-bright);
+    margin-bottom: 16px;
+    display: block;
+  }
+  .section-line {
+    width: 60px; height: 2px;
+    background: linear-gradient(90deg, var(--blue-electric), var(--blue-light));
+    border-radius: 2px;
+    margin-bottom: 48px;
+    box-shadow: 0 0 12px rgba(96,165,250,0.6);
+  }
+
+  .container { max-width: 1100px; width: 100%; margin: 0 auto; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* === ABOUT === */
+  #about { background: transparent; }
+  .about-card {
+    padding: 60px;
+    max-width: 900px;
+    width: 100%;
+    text-align: center;
+  }
+  .about-avatar {
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue-electric), var(--blue-light));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Sora', sans-serif;
+    font-size: 36px;
+    font-weight: 800;
+    color: white;
+    margin: 0 auto 32px;
+    box-shadow: 0 0 0 4px rgba(37,99,235,0.3), 0 0 40px rgba(37,99,235,0.4);
+    animation: avatarFloat 4s ease-in-out infinite;
+    position: relative;
+  }
+  .about-avatar::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 1px solid rgba(96,165,250,0.4);
+    animation: ringExpand 2s ease-in-out infinite;
+  }
+  @keyframes avatarFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  @keyframes ringExpand { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.15); opacity: 0.4; } }
+
+  .about-name { font-family: 'Sora', sans-serif; font-size: 32px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+  .about-uni {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(37,99,235,0.12); border: 1px solid rgba(37,99,235,0.3);
+    border-radius: 50px; padding: 6px 20px;
+    font-size: 13px; color: var(--blue-light);
+    margin-bottom: 8px;
+  }
+  .about-group {
+    font-size: 13px; color: var(--text-secondary);
+    margin-bottom: 28px;
+  }
+  .about-bio {
+    font-size: 16px; line-height: 1.8;
+    color: var(--text-secondary);
+    max-width: 600px; margin: 0 auto;
+  }
+
+  /* === ACHIEVEMENTS === */
+  #achievements { background: transparent; }
+  .achievements-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    width: 100%;
+  }
+  .cert-card {
+    padding: 36px 32px;
+    border-radius: 24px;
+    position: relative;
+  }
+  .cert-icon {
+    font-size: 36px;
+    margin-bottom: 16px;
+  }
+  .cert-title {
+    font-family: 'Sora', sans-serif;
+    font-size: 18px; font-weight: 700;
+    color: #fff; margin-bottom: 4px;
+  }
+  .cert-subject {
+    font-size: 13px; color: var(--text-secondary);
+    margin-bottom: 24px;
+  }
+  .cert-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; color: var(--blue-light);
+    text-decoration: none;
+    border: 1px solid rgba(96,165,250,0.3);
+    border-radius: 50px; padding: 4px 14px;
+    margin-bottom: 20px;
+    transition: all 0.3s;
+    backdrop-filter: blur(8px);
+  }
+  .cert-link:hover { background: rgba(96,165,250,0.15); border-color: rgba(96,165,250,0.6); }
+
+  /* Progress bar */
+  .progress-wrap {
+    margin-top: 16px;
+  }
+  .progress-header {
+    display: flex; justify-content: space-between;
+    font-size: 12px; margin-bottom: 8px;
+    color: var(--text-secondary);
+  }
+  .progress-track {
+    height: 6px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 50px;
+    overflow: hidden;
+    position: relative;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 50px;
+    width: 0%;
+    transition: width 2s cubic-bezier(0.34,1.2,0.64,1);
+    position: relative;
+  }
+  .progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 10px; height: 100%;
+    background: rgba(255,255,255,0.6);
+    border-radius: 50px;
+    filter: blur(3px);
+    animation: shimmer 2s ease-in-out infinite;
+  }
+  @keyframes shimmer { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+  .fill-green { background: linear-gradient(90deg, #16a34a, #22c55e, #4ade80); box-shadow: 0 0 16px rgba(34,197,94,0.5); }
+  .fill-orange { background: linear-gradient(90deg, #c2410c, #f97316, #fb923c); box-shadow: 0 0 16px rgba(249,115,22,0.5); }
+  .fill-teal { background: linear-gradient(90deg, #0e7490, #06b6d4, #22d3ee); box-shadow: 0 0 16px rgba(6,182,212,0.5); }
+
+  /* === SKILLS === */
+  #skills { background: transparent; }
+  .skills-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; width: 100%; }
+  .skill-card { padding: 40px 36px; }
+  .skill-card-title {
+    font-family: 'Sora', sans-serif;
+    font-size: 20px; font-weight: 700; color: #fff;
+    margin-bottom: 28px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .skill-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-size: 13px; font-weight: 500;
+    margin: 4px;
+    transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1);
+    cursor: default;
+    backdrop-filter: blur(12px);
+    border: 1px solid transparent;
+  }
+  .soft-pill {
+    background: rgba(37,99,235,0.12);
+    border-color: rgba(37,99,235,0.25);
+    color: var(--blue-light);
+  }
+  .soft-pill:hover {
+    background: rgba(37,99,235,0.25);
+    border-color: rgba(96,165,250,0.5);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 24px rgba(37,99,235,0.25);
+  }
+  .hard-pill {
+    background: rgba(6,182,212,0.1);
+    border-color: rgba(6,182,212,0.25);
+    color: var(--teal);
+  }
+  .hard-pill:hover {
+    background: rgba(6,182,212,0.2);
+    border-color: rgba(6,182,212,0.5);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 24px rgba(6,182,212,0.2);
+  }
+
+  @media (max-width: 700px) { .skills-wrap { grid-template-columns: 1fr; } }
+
+  /* === LANGUAGES === */
+  #languages { background: transparent; }
+  .lang-list { display: flex; flex-direction: column; gap: 24px; width: 100%; max-width: 600px; margin: 0 auto; }
+  .lang-item { padding: 28px 36px; border-radius: 20px; }
+  .lang-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .lang-name { font-family: 'Sora', sans-serif; font-size: 18px; font-weight: 600; color: #040b46; }
+  .lang-flag { font-size: 24px; }
+  .stars-row { display: flex; gap: 8px; }
+  .star-icon {
+    font-size: 22px;
+    transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), filter 0.4s;
+    opacity: 0;
+  }
+  .star-icon.active { opacity: 1; }
+  .star-icon.inactive { opacity: 0.18; }
+  .star-gold { color: #fbbf24; filter: drop-shadow(0 0 6px rgba(251,191,36,0.7)); }
+  .star-gold.inactive { color: rgb(0, 0, 0); filter: none; }
+
+  /* === CONTACT === */
+  #contact { background: transparent; }
+  .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; width: 100%; }
+  .contact-card {
+    padding: 32px 28px;
+    text-align: center;
+    border-radius: 20px;
+    text-decoration: none;
+    color: inherit;
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+    transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  .contact-card:hover { transform: translateY(-8px) scale(1.04); }
+  .contact-icon { font-size: 32px; }
+  .contact-platform { font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--blue-light); }
+  .contact-handle { font-size: 15px; font-weight: 500; color: #fff; }
+
+  /* === CLOCK === */
+  #clock-section {
+    min-height: auto;
+    padding: 40px 24px 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+  .clock-card {
+    padding: 48px 80px;
+    text-align: center;
+    border-radius: 28px;
+  }
+  .clock-date {
+    font-size: 14px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--blue-light); margin-bottom: 16px;
+    font-weight: 500;
+  }
+  .clock-time {
+    font-family: 'Sora', sans-serif;
+    font-size: clamp(48px, 8vw, 80px);
+    font-weight: 800;
+    background: linear-gradient(135deg, #fff, #60a5fa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -2px;
+    line-height: 1;
+    filter: drop-shadow(0 0 20px rgba(96,165,250,0.4));
+  }
+  .clock-seconds {
+    font-size: 14px; color: var(--text-secondary); margin-top: 8px;
+    font-weight: 300; letter-spacing: 2px;
+  }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 24px;
+    font-size: 12px;
+    color: rgba(191,219,254,0.3);
+    letter-spacing: 2px;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.8s cubic-bezier(0.34,1.56,0.64,1), transform 0.8s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* DIVIDER */
+  .divider {
+    width: 100%; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(96,165,250,0.3), transparent);
+    margin: 0 auto;
+    max-width: 800px;
+    position: relative;
+    z-index: 2;
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="mouse-aura" id="mouseAura"></div>
+
+<!-- SKY BACKGROUND -->
+<div class="sky-bg">
+  <div class="stars" id="stars"></div>
+  <div class="clouds" id="clouds"></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#about">Men haqimda</a>
+  <a href="#achievements">Yutuqlar</a>
+  <a href="#skills">Ko'nikmalar</a>
+  <a href="#languages">Tillar</a>
+  <a href="#contact">Bog'lanish</a>
+</nav>
+
+<!-- PAGE -->
+<div class="page">
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      Software Engineer · Cyber University
+    </div>
+    <h1 class="hero-name">Sherzod<br>Zinatdinov</h1>
+    <p class="hero-title">
+      <span>SWE25-102-B</span> · Kelajakda sohaning yetuk mutaxassisi
+    </p>
+    <div class="hero-scroll">
+      <span class="scroll-text">Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <div class="reveal">
+        <div class="glass about-card" style="margin:0 auto;">
+          <div class="about-avatar">SZ</div>
+          <div class="about-name">Zinatdinov Sherzod</div>
+          <div class="about-uni">🎓 Cyber University</div>
+          <div class="about-group">Software Engineering · SWE25-102-B</div>
+          <p class="about-bio">
+            Men kelajakda o'z sohamning yaxshi mutaxassisi bo'lishni maqsad qilganman. 
+            Dasturlash, matematika va fizika sohasida bilimlarimni doimiy oshirib boraman.
+            Premium darajadagi professional mutaxassis sifatida rivojlanayotgan yoshman.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ACHIEVEMENTS -->
+  <section id="achievements">
+    <div class="container">
+      <div class="reveal" style="text-align:center; margin-bottom: 60px;">
+        <span class="section-label">Yutuqlarim</span>
+        <h2 class="section-title">Sertifikatlar</h2>
+        <div class="section-line" style="margin:0 auto;"></div>
+      </div>
+      <div class="achievements-grid reveal">
+
+        <!-- Matematika -->
+        <div class="glass cert-card">
+          <div class="cert-icon">🏆</div>
+          <div class="cert-title">Matematika</div>
+          <div class="cert-subject">A darajali · Milliy sertifikat</div>
+          <a class="cert-link" href="https://app.uzbmb.uz/national_cert/certificates/3affac9acf82d824e0fd01c9c1a8b340.pdf" target="_blank">
+            🔗 Sertifikatni ko'rish
+          </a>
+          <div class="progress-wrap">
+            <div class="progress-header">
+              <span>Natija</span>
+              <span style="color:#22c55e; font-weight:700;">100%</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill fill-green" data-width="100"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fizika -->
+        <div class="glass cert-card">
+          <div class="cert-icon">⚛️</div>
+          <div class="cert-title">Fizika</div>
+          <div class="cert-subject">C+ darajali · Milliy sertifikat</div>
+          <a class="cert-link" href="https://app.uzbmb.uz/national_cert/certificates/3f0fca311b9d728bebebef1e2825864d.pdf" target="_blank">
+            🔗 Sertifikatni ko'rish
+          </a>
+          <div class="progress-wrap">
+            <div class="progress-header">
+              <span>Natija</span>
+              <span style="color:#f97316; font-weight:700;">79.4%</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill fill-orange" data-width="79.4"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mobilografiya -->
+        <div class="glass cert-card" style="border: 1px solid rgba(6,182,212,0.25); box-shadow: 0 32px 80px rgba(0,0,0,0.35), 0 0 40px rgba(6,182,212,0.08), 0 0 0 0.5px rgba(255,255,255,0.06) inset;">
+          <div class="cert-icon">📸</div>
+          <div class="cert-title">Mobilografiya</div>
+          <div class="cert-subject">Professional sertifikat</div>
+          <a class="cert-link" href="https://hujjat.uz/document/ru-RU?pin=mI14pQ38&id=158fab3f-7ff4-45fb-9c93-8590fc890ecd" target="_blank">
+            🔗 Sertifikatni ko'rish
+          </a>
+          <div class="progress-wrap">
+            <div class="progress-header">
+              <span>Natija</span>
+              <span style="color:#22d3ee; font-weight:700;">100%</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill fill-teal" data-width="100"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="container">
+      <div class="reveal" style="text-align:center; margin-bottom:60px;">
+        <span class="section-label">Qobiliyatlar</span>
+        <h2 class="section-title">Ko'nikmalar</h2>
+        <div class="section-line" style="margin:0 auto;"></div>
+      </div>
+      <div class="skills-wrap reveal">
+        <div class="glass skill-card">
+          <div class="skill-card-title">💬 Soft Skills</div>
+          <div>
+            <span class="skill-pill soft-pill">🗣️ Muloqot qilish</span>
+            <span class="skill-pill soft-pill">🤝 Jamoada ishlash</span>
+            <span class="skill-pill soft-pill">🎭 Tana tili va madaniyat</span>
+            <span class="skill-pill soft-pill">🧘 Stressni boshqarish</span>
+            <span class="skill-pill soft-pill">✅ Mas'uliyatlilik</span>
+          </div>
+        </div>
+        <div class="glass skill-card">
+          <div class="skill-card-title">⚡ Hard Skills</div>
+          <div>
+            <span class="skill-pill hard-pill">📐 Matematika</span>
+            <span class="skill-pill hard-pill">⚛️ Fizika</span>
+            <span class="skill-pill hard-pill">💻 Dasturlash C++</span>
+            <span class="skill-pill hard-pill">🇬🇧 Ingliz tili</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- LANGUAGES -->
+  <section id="languages">
+    <div class="container">
+      <div class="reveal" style="text-align:center; margin-bottom:60px;">
+        <span class="section-label">Tillar</span>
+        <h2 class="section-title">Til Bilimi</h2>
+        <div class="section-line" style="margin:0 auto;"></div>
+      </div>
+      <div class="lang-list reveal">
+
+        <div class="glass lang-item">
+          <div class="lang-header">
+            <div class="lang-name">O'zbek tili</div>
+            <div class="lang-flag">🇺🇿</div>
+          </div>
+          <div class="stars-row" data-filled="5" data-total="5" data-color="gold"></div>
+        </div>
+
+        <div class="glass lang-item">
+          <div class="lang-header">
+            <div class="lang-name">Ingliz tili</div>
+            <div class="lang-flag">🇬🇧</div>
+          </div>
+          <div class="stars-row" data-filled="3" data-total="5" data-color="gold"></div>
+        </div>
+
+        <div class="glass lang-item">
+          <div class="lang-header">
+            <div class="lang-name">Rus tili</div>
+            <div class="lang-flag">🇷🇺</div>
+          </div>
+          <div class="stars-row" data-filled="2" data-total="5" data-color="gold"></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <div class="reveal" style="text-align:center; margin-bottom:60px;">
+        <span class="section-label">Aloqa</span>
+        <h2 class="section-title">Bog'lanish</h2>
+        <div class="section-line" style="margin:0 auto;"></div>
+      </div>
+      <div class="contact-grid reveal">
+
+        <a class="glass contact-card" href="https://t.me/shzinatdinov" target="_blank">
+          <div class="contact-icon">✈️</div>
+          <div class="contact-platform">Telegram</div>
+          <div class="contact-handle">@shzinatdinov</div>
+        </a>
+
+        <a class="glass contact-card" href="https://t.me/creativecloud7" target="_blank">
+          <div class="contact-icon">📢</div>
+          <div class="contact-platform">Telegram Kanal</div>
+          <div class="contact-handle">@creativecloud7</div>
+        </a>
+
+        <a class="glass contact-card" href="https://instagram.com/shzinatdinov69" target="_blank">
+          <div class="contact-icon">📸</div>
+          <div class="contact-platform">Instagram</div>
+          <div class="contact-handle">@shzinatdinov69</div>
+        </a>
+
+        <a class="glass contact-card" href="mailto:shzinatdinov@gmail.com" target="_blank">
+          <div class="contact-icon">📧</div>
+          <div class="contact-platform">Gmail</div>
+          <div class="contact-handle">shzinatdinov@gmail.com</div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CLOCK -->
+  <section id="clock-section">
+    <div class="reveal">
+      <div class="glass clock-card">
+        <div class="clock-date" id="clockDate"></div>
+        <div class="clock-time" id="clockTime"></div>
+        <div class="clock-seconds" id="clockSeconds"></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>© 2025 Sherzod Zinatdinov · Barcha huquqlar himoyalangan</footer>
+
+<script>
+// ===== CURSOR =====
+const cursor = document.getElementById('cursor');
+const cursorRing = document.getElementById('cursorRing');
+const mouseAura = document.getElementById('mouseAura');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+  mouseAura.style.left = mx + 'px'; mouseAura.style.top = my + 'px';
+});
+
+function animateCursorRing() {
+  rx += (mx - rx) * 0.14;
+  ry += (my - ry) * 0.14;
+  cursorRing.style.left = rx + 'px';
+  cursorRing.style.top = ry + 'px';
+  requestAnimationFrame(animateCursorRing);
+}
+animateCursorRing();
+
+// ===== STARS =====
+const starsEl = document.getElementById('stars');
+for (let i = 0; i < 80; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  const size = Math.random() * 2.5 + 0.5;
+  s.style.cssText = `
+    width:${size}px; height:${size}px;
+    left:${Math.random()*100}%; top:${Math.random()*60}%;
+    --dur:${Math.random()*3+2}s;
+    --delay:${Math.random()*4}s;
+  `;
+  starsEl.appendChild(s);
+}
+
+// ===== CLOUDS =====
+const cloudsEl = document.getElementById('clouds');
+const cloudData = [
+  { w: 200, h: 50, top: 12, speed: '80s', delay: '0s', opacity: 0.13 },
+  { w: 300, h: 70, top: 22, speed: '110s', delay: '-30s', opacity: 0.1 },
+  { w: 160, h: 40, top: 8, speed: '65s', delay: '-20s', opacity: 0.09 },
+  { w: 250, h: 60, top: 35, speed: '95s', delay: '-50s', opacity: 0.12 },
+  { w: 180, h: 45, top: 18, speed: '75s', delay: '-10s', opacity: 0.08 },
+];
+cloudData.forEach(d => {
+  const c = document.createElement('div');
+  c.className = 'cloud';
+  c.style.cssText = `
+    width:${d.w}px; height:${d.h}px;
+    top:${d.top}%; opacity:${d.opacity};
+    --speed:${d.speed};
+    animation-delay:${d.delay};
+  `;
+  cloudsEl.appendChild(c);
+});
+
+// ===== REVEAL ON SCROLL =====
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => {
+        e.target.classList.add('visible');
+        // Trigger progress bars & stars when visible
+        e.target.querySelectorAll('.progress-fill').forEach(bar => {
+          setTimeout(() => {
+            bar.style.width = bar.dataset.width + '%';
+          }, 300);
+        });
+        e.target.querySelectorAll('.stars-row').forEach(row => {
+          buildStars(row);
+        });
+      }, i * 100);
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.15 });
+reveals.forEach(r => observer.observe(r));
+
+// ===== BUILD STARS =====
+function buildStars(row) {
+  const filled = parseInt(row.dataset.filled);
+  const total = parseInt(row.dataset.total);
+  row.innerHTML = '';
+  for (let i = 0; i < total; i++) {
+    const star = document.createElement('span');
+    star.className = 'star-icon star-gold' + (i < filled ? ' active' : ' inactive');
+    star.textContent = '★';
+    row.appendChild(star);
+    // Animate each star with delay
+    if (i < filled) {
+      star.style.transform = 'scale(0) rotate(-30deg)';
+      setTimeout(() => {
+        star.style.transition = `transform 0.5s cubic-bezier(0.34,1.56,0.64,1) ${i*120}ms, opacity 0.3s ${i*120}ms`;
+        star.style.transform = 'scale(1) rotate(0deg)';
+      }, 200 + i * 120);
+    }
+  }
+}
+
+// ===== CLOCK =====
+function updateClock() {
+  const now = new Date();
+  const days = ['Yakshanba','Dushanba','Seshanba','Chorshanba','Payshanba','Juma','Shanba'];
+  const months = ['Yanvar','Fevral','Mart','Aprel','May','Iyun','Iyul','Avgust','Sentabr','Oktabr','Noyabr','Dekabr'];
+
+  const day = days[now.getDay()];
+  const date = now.getDate();
+  const month = months[now.getMonth()];
+  const year = now.getFullYear();
+
+  const h = String(now.getHours()).padStart(2,'0');
+  const m = String(now.getMinutes()).padStart(2,'0');
+  const s = String(now.getSeconds()).padStart(2,'0');
+
+  document.getElementById('clockDate').textContent = `${day}, ${date} ${month} ${year}`;
+  document.getElementById('clockTime').textContent = `${h}:${m}`;
+  document.getElementById('clockSeconds').textContent = `${s} soniya`;
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+// ===== 3D TILT ON GLASS CARDS =====
+document.querySelectorAll('.glass').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    card.style.transform = `perspective(1000px) rotateY(${x*10}deg) rotateX(${-y*10}deg) translateY(-6px) scale(1.01)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = '';
+    card.style.transition = 'transform 0.6s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.5s';
+  });
+});
+</script>
+</body>
+</html>
